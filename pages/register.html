@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href ="/css/styles-register.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <title>Registre-se</title>
+</head>
+<body>
+    <section class="section">
+        <div class="section-div1">
+            <img class="section-div1-img" src="/logos/Periodize-logos.jpeg">
+        </div>
+        <form action="" method="POST" class="section-div2">
+            <h2 class="section-div-2-register-text">Registre-se</h2>
+            <div>
+                <input required class="input" type="text" class="name" placeholder="Nome">
+            </div>
+            <div>
+                <input required class="input" type="email" class="email" placeholder="E-mail">
+            </div>
+            <div>
+                <input required class="input" type="password" oninput="verifyPassword()" id="passwd" minlength="6" class="passwd" placeholder="Senha com no mínimo 6 caracteres">
+            </div>
+            <div>
+                <input required class="input" type="password" oninput="verifyPassword()" id="passwd-repeat" minlength="6" class="passwd-repeat" placeholder="Repita a senha">
+                <br><text id="passwd-match"><br></text>
+            </div>
+            
+            <button id="button"class="button" type="submit"><b>Cadastre-se</b></button>
+            <script>
+                function verifyPassword(){
+                    let modified = document.getElementById("passwd-match");
+                    let pass1 = document.getElementById("passwd").value;
+                    let pass2 = document.getElementById("passwd-repeat").value;
+                    console.log(pass1.length);
+                    console.log(pass1, pass2);
+                    if (pass1.length >= 6 && pass1 == pass2){
+                        modified.innerHTML = `<text class="passwd-match" id="passwd-match">As senhas conferem</text>`;
+                        document.getElementById("button").disabled = false;
+                    }if ((pass1.length >= 6 || pass1.length <= 6) && pass1 != pass2){
+                        modified.innerHTML = `<text class="passwd-match id="passwd-match">As senhas não conferem</text>`;
+                        document.getElementById("button").disabled = true;
+                    }if (pass1.length==0 || pass2.length==0){
+                        modified.innerHTML = `<text id="passwd-match"><br></text>`;
+                    }
+                }
+                
+            </script>
+        </form>
+    </section>
+</body>
+</html>
