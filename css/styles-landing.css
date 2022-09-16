@@ -6,18 +6,24 @@ body{
 
     display: flex;
     align-items: flex-start;
-    
+    margin-left: 5%;
 }
 .navbar-ref{
 
     width:40%;
-    margin-left: 46%;
-    margin-top: 3%;
+    margin-left: 63%;
+    margin-top: 4%;
     margin-right: 0%;
    
 }
+.navbar-img{
+    width: 10%;
+    border-radius: 5px;
+    margin-top: 3%;
+    
+}
 .ref{
-    color: rgb(234, 168, 44);
+    color: #eaa82c;
     margin-left: 5%;
     text-decoration: none;
 }
@@ -55,7 +61,7 @@ body{
     display: flex;
     flex-wrap: wrap;
     margin-left: 39%;
-    margin-top: -15%;
+    margin-top: -23%;
     width: 60%;
     justify-content: center;
     border-width: 1px;
@@ -94,4 +100,10 @@ body{
     color:white;
     margin-right:18%;
     
+}
+.welcome-title-1{
+    font-size: 35px;
+    text-align: justify;
+    color:white;
+    margin-right:18%;
 }
