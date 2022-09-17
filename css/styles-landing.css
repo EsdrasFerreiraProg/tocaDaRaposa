@@ -28,20 +28,7 @@ body{
     text-decoration: none;
 }
 
-.categories{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.categories-text{
-    color:rgb(234, 168, 44);
-    margin-top: 5%;
-}
-.categories-icon{
-    border-radius: 5px;
-    width: 40%;
 
-}
 .welcome{
     display: flex;
     margin-top: 5%;
@@ -57,7 +44,7 @@ body{
     
 }
 
-.categories-section{
+.background-image{
     display: flex;
     flex-wrap: wrap;
     margin-left: 39%;
