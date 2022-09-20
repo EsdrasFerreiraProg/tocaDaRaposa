@@ -1,9 +1,37 @@
 .text{
     color: #eaa82c;
+    line-height: 1.2;
+    margin-bottom: -1%;
 }
 .image-css{
     opacity: 0.1;
 }
 .fox-icon{
     
+}
+
+.col{
+    width: 100%;
+}
+
+.text-description{
+    color: white;   
+}
+.text-categories{
+   
+    color: white;
+}
+hr{
+    color:white;
+}
+.container-lg{
+    margin: 0% 0% 0% 0%;
+}
+
+.image-different{
+    height: 100%;
+}
+.container-categories{
+    margin-top: 5%;
+    margin-bottom: 2%;
 }
