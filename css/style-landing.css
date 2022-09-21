@@ -9,17 +9,30 @@
 .fox-icon{
     
 }
+.caption{
+    color:white;
+    margin-top: -4%;
+    
+}
+.col-sm:hover{
+    transform: scale(1.02);
+}
 
 .col{
     width: 100%;
 }
-
+.navbar-toggler{
+    height: 30px;
+}
+.navbar-toggler-icon{
+    height: 20%;
+}
 .text-description{
     color: white;   
 }
 .text-categories{
+   color:#eaa82c;
    
-    color: white;
 }
 hr{
     color:white;
@@ -29,9 +42,20 @@ hr{
 }
 
 .image-different{
-    height: 100%;
+    
+    height: 96%;
 }
+
+.edit-class{
+   margin-bottom: 10%;
+   
+}
+
 .container-categories{
     margin-top: 5%;
     margin-bottom: 2%;
+}
+.product-caption{
+    color: white;
+    line-height: 1.2;
 }
