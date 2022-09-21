@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <!-- Modal Confirmation -->
+        <div th:fragment="modal-confirm" class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="modal-title" 
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="background-color: #1d2630">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                            aria-label="Close"></button>
+                    </div>
+                    <div id="modal-message" class="modal-body">
+                        CORPO DO MODAL
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" 
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success modal-confirm-deletion" 
+                            data-bs-dismiss="modal">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

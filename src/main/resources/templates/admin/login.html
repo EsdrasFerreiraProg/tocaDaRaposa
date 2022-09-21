@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faça o Login :: Toca da Raposa</title>
+    <link rel="icon" th:href="@{/images/modelo-icone.png}"/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
+    <!-- Icons fontawesome -->
+	<link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous" rel="stylesheet" />
+
+    <!--CUSTOM CSS-->
+    <link rel="stylesheet"  type="text/css" th:href ="@{/css/styles-login.css}" href="/css/styles-login.css">
+</head>
+
+<body>
+    <div class="loginBox">
+        <img class="user" th:src="@{/images/modelo-icone.png}" src="/images/modelo-icone.png" width="200px">
+        <h3>Area Restrita</h3>
+
+        <div th:if="${alerta != null}" th:class="${alerta == 'erro'} ? 'alert alert-danger' : 'alert alert-success'"
+            role="alert">
+            <h5 th:text="${titulo}" class="alert-heading">Credenciais...</h5>
+            <h6 th:text="${texto}">Login ou senha incorretos...</h6>
+        </div>
+
+        <p>Para continuar faça login.</p>
+        <form th:action="@{/admin/login}" method="post">
+            <div class="inputBox">
+                <input type="email" id="inputEmail" placeholder="Email" name="username">
+                <input type="password" id="inputPassword" placeholder="Senha" name="password">
+            </div>
+            <input type="submit" name="" value="Login">
+        </form>
+        <div class="row">
+            <a th:href="@{/home}" style="color: #59238F;" class="col"><i
+					class="fas fa-home"></i>Home</a>
+        </div>
+    </div>
+
+    <!--SCRIPTS JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

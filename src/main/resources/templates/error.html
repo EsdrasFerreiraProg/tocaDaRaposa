@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Erro :: Toca da Raposa</title>
+        <link th:href="@{/css/styles-error.css}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div id="notfound">
+            <div class="notfound">
+            <div class="notfound-404"></div>
+                <h1 th:text="${status}">404</h1>
+                <h2 th:text="${errorTitle}">Oops! Page Not Be Found</h2>
+                <p th:text="${errorDescription}">Sorry but the page you are looking for does not exist, have been removed. name changed or is temporarily unavailable</p>
+                <a th:href="@{/home}">Voltar para o ínicio.</a>
+            </div>
+        </div>
+    </body>
+</html>
