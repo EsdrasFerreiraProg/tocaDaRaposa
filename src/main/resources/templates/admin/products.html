@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <!--MAIN-->
+        <div class="container mt-5" layout:fragment="corpo">
+            <div class="text-center">
+                <h1 class="display-5 mb-5"><strong>Gerenciar Produtos</strong></h1>
+            </div>
+            <div class="main row justify-content-center">
+
+                <div th:replace="fragments/alert  :: alerta-sucesso"></div>
+
+                <form th:action="${productdto.id == null} ? @{/admin/product/salvar} : @{/admin/product/editar}" 
+                    th:object="${productdto}" id="product-form" class="row justify-content-center mb-4" 
+                    autocomplete="off" method="POST" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="name">Nome</label>
+                            <input class="form-control" th:classappend="${name != null} ? is-invalid" th:field="*{name}" id="name" type="text"
+                                placeholder="Insira o nome do produto">
+                            <div th:if="${name != null}" class="text-danger">
+                                <small th:text="${name}">O produto precisa de um nome.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="category">Categoria</label>
+                            <select th:field="*{category}" class="form-control" th:classappend="${category != null} ? is-invalid" id="category">
+                                <option value="">Selecione...</option>
+                                <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.title}"></option>
+                            </select>
+                            <div th:if="${category != null}" class="text-danger">
+                                <small th:text="${category}">O produto precisa de uma categoria.</small>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="price">Preço</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input th:field="*{price}" class="form-control" th:classappend="${price != null} ? is-invalid"
+                                       aria-label="Digite o preço do produto.">
+                            </div>
+                            <div th:if="${price != null}" class="text-danger">
+                                <small th:text="${price}">O produto precisa de um preço.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="image">Imagem</label>
+                            <input class="form-control" th:classappend="${image != null} ? is-invalid" th:field="*{image}" id="image"
+                                name="image" type="file">
+                            <div th:if="${image != null}" class="text-danger">
+                                <small th:text="${image}">O produto precisa de uma imagem.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" th:field="*{active}" id="active">
+                                <label class="form-check-label" for="active">
+                                  Disponivel
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" th:field="*{id}">
+                    <div class="row">
+                        <div class="col-10">
+                            <input class="btn btn-success add-btn" type="submit" value="Salvar">
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col mt-5">
+                    <table class="table table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th style="display:none;">id</th>
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Categoria</th>
+                                <th class="text-center">Preço</th>
+                                <th class="text-center">Disponivel</th>
+                                <th style="display:none;">imagename</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-list">
+                            <tr th:each="p : ${products}">
+                                <td style="display:none;" th:text="${p.id}">0</td>
+                                <td th:text="${p.name}">Copo Metalica</td>
+                                <td class="text-center" th:text="${p.category.title}">Outros</td>
+                                <td class="text-end" th:text="${'R$ ' + #numbers.formatDecimal(p.price, 0, 'POINT', 2, 'COMMA')}">R$ 13,80</td>
+                                <div th:switch="${p.active == true}">
+                                    <td class="text-center" th:case="${true}">Sim</td>
+                                    <td class="text-center" th:case="*">Não</td>
+                                </div>
+                                <td style="display:none;" th:text="${p.imagename}">#</td>
+                                <td class="text-center" >
+                                    <a th:href="@{/admin/product/editar/} + ${p.id}" class="btn btn-warning btn-sm edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="#" class="btn btn-danger btn-sm delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-primary btn-sm image">
+                                        <i class="fa-solid fa-image"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="imageModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div id="imageModalContent" class="modal-body justify-content-center image-modal">
+                            <img src="" class="img-responsive">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script type="text/javascript" th:src="@{/js/products.js}" th:fragment="js"></script>
+
+    </body>
+</html>
