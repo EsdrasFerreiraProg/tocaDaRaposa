@@ -24,7 +24,7 @@
                         <div class="col mb-3">
                             <label for="name">Nome</label>
                             <input class="form-control" th:classappend="${name != null} ? is-invalid" th:field="*{name}" id="name" type="text"
-                                placeholder="Insira o nome do produto">
+                                placeholder="Insira o nome do produto" required>
                             <div th:if="${name != null}" class="text-danger">
                                 <small th:text="${name}">O produto precisa de um nome.</small>
                             </div>
@@ -46,7 +46,7 @@
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
                                 <input th:field="*{price}" class="form-control" th:classappend="${price != null} ? is-invalid"
-                                       aria-label="Digite o preço do produto.">
+                                       aria-label="Digite o preço do produto." required>
                             </div>
                             <div th:if="${price != null}" class="text-danger">
                                 <small th:text="${price}">O produto precisa de um preço.</small>

@@ -23,9 +23,9 @@
                         <div class="col mb-3">
                             <label for="title">Nome</label>
                             <input class="form-control" th:classappend="${title != null} ? is-invalid" th:field="*{title}" id="title" type="text"
-                                placeholder="Insira o nome do produto">
+                                placeholder="Insira o nome da categoria" required>
                             <div th:if="${title != null}" class="text-danger">
-                                <small th:text="${title}">O produto precisa de um nome.</small>
+                                <small th:text="${title}">A categoria precisa de um Nome.</small>
                             </div>
                         </div>
                     </div>
@@ -33,9 +33,9 @@
                         <div class="col mb-3">
                             <label for="image">Imagem</label>
                             <input class="form-control" th:classappend="${image != null} ? is-invalid" th:field="*{image}" id="image"
-                                name="image" type="file">
+                                name="image" type="file" required>
                             <div th:if="${image != null}" class="text-danger">
-                                <small th:text="${image}">O produto precisa de uma imagem.</small>
+                                <small th:text="${image}">O categoria precisa de uma imagem.</small>
                             </div>
                         </div>
                     </div>
