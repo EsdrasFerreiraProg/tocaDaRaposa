@@ -62,6 +62,7 @@ public class CategoryService{
 
         c.setTitle(categorydto.getTitle());
         c.setImagename("dump");
+        c = categoryRepository.save(c);
 
         String imagename = "category-" + String.valueOf(c.getId());
         try {
