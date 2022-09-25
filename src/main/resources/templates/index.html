@@ -71,7 +71,7 @@
             </div>
             <div class="col">
               <hr>
-              <p class="fs-1 d-flex justify-content-center text-categories my-0">Categorias</p>
+              <p class="fs-1 d-flex justify-content-center text-categories my-0">Escolha uma categoria</p>
               <hr>
               
           </div>
@@ -83,41 +83,95 @@
         <div class="row my-0">
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Moda Praia</div>
-            <a href=""><img class="img-fluid" src="/images/slide-1 (2).jpg"></a>
+            <input onclick="displayCat(this)" type="image" src="/images/slide-1 (2).jpg" name="moda-praia" class="img-fluid" id="saveForm" />
           </div>
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Moda Íntima</div>
-            <a href=""><img class="img-fluid" src="/images/slide-2 (2).jpg"></a>
+            <input onclick="displayCat(this)" type="image" src="/images/slide-2 (2).jpg" name="moda-intima" class="img-fluid" id="saveForm" />
           </div>
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Acessórios</div>
-            <a><img class="img-fluid image-different" src="/images/slide-3 (2).jpg"></a>
+            <input onclick="displayCat(this)" type="image" src="/images/slide-3 (2).jpg" name="acessorios" class="img-fluid image-different" id="saveForm" />
+          </div>
+          <div class="col-sm my-2">
+            <div class="caption text-center fs-3">Outros</div>
+            <input onclick="displayCat(this)" type="image" src="/images/slide-4.jpg" name="outros" class="img-fluid" id="saveForm" />
           </div>
         </div>
-        
+       
       </div>
       <hr>
       <p class="fs-1 d-flex justify-content-center text-categories my-0">Nossos produtos</p>
       <hr>
       <div class="container-fluid my-5">
-        <div class="row row-cols-2 row-cols-sm-6">
-          <div class="col-sm">
+        <div id="category-id" class="row row-cols-2 row-cols-sm-6">
+          
+          <script>
+            async function getRegister(){
+
+                let url = '/api/products/all';
+                
+                try {
+                    let res = await fetch(url);
+                    return await res.json();
+                } catch (error) {
+                    console.log(error);
+                }
+              }
+
+            async function getCat(category){
+                let getJsonFromFunction = await new Promise((resolve)=>{
+                  resolve(getRegister());
+                });
+
+                let newArrayFiltered = getJsonFromFunction.filter(element => element.category.title == category);
+                console.log(getJsonFromFunction);
+                return newArrayFiltered;
+            }
+
+            async function displayCat(domElement){
+              let array = [];
+
+              let catName = domElement.name;
+              
+              if (catName == "moda-praia"){
+                array = await getCat("Moda Praia");
+              }else if(catName == "moda-intima"){
+                array = await getCat("Moda Intima");
+              }else if(catName == "acessorios"){
+                array = await getCat("Acessorios");
+              }else{
+                array = await getCat("outros");
+              }
+
+              let htmlChange = "";
+
+              let element = document.getElementById("category-id");
+              array.forEach(element => {
+                let disponivel = "";
+                if(element.active == true){
+                  disponivel = "Em estoque";
+                }else{
+                  disponivel = "Em falta";
+                }
+
+                htmlChange += `<div class="col-sm">
             <div class="container-fluid edit-class">
-              <img class="img-fluid border" src="/images/modapraia.jpeg" >
-              <div class="product-caption fs-5 fw-bold">Colar de contas</div>
-              <div class="product-caption fs-6">Em estoque</div>
-              <div class="product-caption">R$ 19,99</div>
+              <img class="img-fluid border" src="/api/products/image/${element.imagename}">
+              <div class="product-caption fs-5 fw-bold">${element.name}</div>
+              <div class="product-caption fs-6">${disponivel}</div>
+              <div class="product-caption">R$ ${element.price},00</div>
             </div>
-          </div>
-          <div class="col-sm">
-            <div class="container-fluid edit-class">
-              <img class="img-fluid border" src="/images/modapraia.jpeg">
-              <div class="product-caption fs-5 fw-bold">Colar de contas</div>
-              <div class="product-caption fs-6">Em estoque</div>
-              <div class="product-caption">R$ 19,99</div>
-            </div>
-          </div>
-  
+          </div>`;
+
+              });
+              element.innerHTML = htmlChange;
+              
+              window.scrollTo(0,document.body.scrollHeight);
+
+            }
+            
+          </script>
         </div>
         </div>
       </div>
