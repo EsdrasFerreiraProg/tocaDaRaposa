@@ -59,3 +59,7 @@ hr{
     color: white;
     line-height: 1.2;
 }
+
+.product-image-change{
+    height: 100%;
+}

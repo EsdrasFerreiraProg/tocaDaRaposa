@@ -101,7 +101,7 @@
        
       </div>
       <hr>
-      <p class="fs-1 d-flex justify-content-center text-categories my-0">Nossos produtos</p>
+      <p id="container-replaced" class="fs-1 d-flex justify-content-center text-categories my-0"></p>
       <hr>
       <div class="container-fluid my-5">
         <div id="category-id" class="row row-cols-2 row-cols-sm-6">
@@ -131,17 +131,30 @@
 
             async function displayCat(domElement){
               let array = [];
+              let replaceContainer = document.getElementById("container-replaced");
 
               let catName = domElement.name;
               
               if (catName == "moda-praia"){
                 array = await getCat("Moda Praia");
+                replaceContainer.innerHTML = `<p id="container-replaced"
+                class="fs-1 d-flex justify-content-center text-categories my-0">
+                Moda Praia</p>`;
               }else if(catName == "moda-intima"){
-                array = await getCat("Moda Intima");
+                array = await getCat("Moda Íntima");
+                replaceContainer.innerHTML = `<p id="container-replaced"
+                class="fs-1 d-flex justify-content-center text-categories my-0">
+                Moda Íntima</p>`;
+
               }else if(catName == "acessorios"){
-                array = await getCat("Acessorios");
+                array = await getCat("Acessórios");
+                replaceContainer.innerHTML = `<p id="container-replaced"
+                class="fs-1 d-flex justify-content-center text-categories my-0">Acessórios</p>`;
               }else{
-                array = await getCat("outros");
+                array = await getCat("Outros");
+                replaceContainer.innerHTML = `<p id="container-replaced"
+                class="fs-1 d-flex justify-content-center text-categories my-0">
+                Outros produtos</p>`;
               }
 
               let htmlChange = "";
@@ -157,10 +170,10 @@
 
                 htmlChange += `<div class="col-sm">
             <div class="container-fluid edit-class">
-              <img class="img-fluid border" src="/api/products/image/${element.imagename}">
+              <img class="img-fluid border product-image-change" width="140" height="140" src="/api/products/image/${element.imagename}">
               <div class="product-caption fs-5 fw-bold">${element.name}</div>
               <div class="product-caption fs-6">${disponivel}</div>
-              <div class="product-caption">R$ ${element.price},00</div>
+              <div class="product-caption">R$ ${element.price}</div>
             </div>
           </div>`;
 
