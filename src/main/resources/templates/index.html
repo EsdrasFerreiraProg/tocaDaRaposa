@@ -83,19 +83,19 @@
         <div class="row my-0">
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Moda Praia</div>
-            <input onclick="displayCat(this)" type="image" src="/images/slide-1 (2).jpg" name="moda-praia" class="img-fluid" id="saveForm" />
+            <input onclick="displayCat(this)" type="image" src="/images/slide-1 (2).jpg" name="moda-praia" class="img-fluid" id="moda-praia"/>
           </div>
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Moda Íntima</div>
-            <input onclick="displayCat(this)" type="image" src="/images/slide-2 (2).jpg" name="moda-intima" class="img-fluid" id="saveForm" />
+            <input onclick="displayCat(this)" type="image" src="/images/slide-2 (2).jpg" name="moda-intima" class="img-fluid" id="moda-intima"/>
           </div>
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Acessórios</div>
-            <input onclick="displayCat(this)" type="image" src="/images/slide-3 (2).jpg" name="acessorios" class="img-fluid image-different" id="saveForm" />
+            <input onclick="displayCat(this)" type="image" src="/images/slide-3 (2).jpg" name="acessorios" class="img-fluid image-different" id="acessorios"/>
           </div>
           <div class="col-sm my-2">
             <div class="caption text-center fs-3">Outros</div>
-            <input onclick="displayCat(this)" type="image" src="/images/slide-4.jpg" name="outros" class="img-fluid" id="saveForm" />
+            <input onclick="displayCat(this)" type="image" src="/images/slide-4.jpg" name="outros" class="img-fluid" id="outros"/>
           </div>
         </div>
        
@@ -107,9 +107,10 @@
         <div id="category-id" class="row row-cols-2 row-cols-sm-6">
           
           <script>
-            async function getRegister(){
+            async function getRegister(category){
 
-                let url = '/api/products/all';
+                //Filtrando categorias pela API
+                let url = '/api/products/bycategory/' + category;
                 
                 try {
                     let res = await fetch(url);
@@ -119,50 +120,42 @@
                 }
               }
 
-            async function getCat(category){
-                let getJsonFromFunction = await new Promise((resolve)=>{
-                  resolve(getRegister());
-                });
+              async function getCat(category){
+                  return await new Promise((resolve)=>{
+                    resolve(getRegister(category));
+                  });
+              }
 
-                let newArrayFiltered = getJsonFromFunction.filter(element => element.category.title == category);
-                console.log(getJsonFromFunction);
-                return newArrayFiltered;
-            }
+              async function displayCat(domElement){
+                let array = [];
 
-            async function displayCat(domElement){
-              let array = [];
+                let catName = domElement.name;
 
-              let catName = domElement.name;
-              
-              if (catName == "moda-praia"){
-                array = await getCat("Moda Praia");
-              }else if(catName == "moda-intima"){
-                array = await getCat("Moda Intima");
-              }else if(catName == "acessorios"){
-                array = await getCat("Acessorios");
-              }else{
-                array = await getCat("outros");
+                if (catName == "moda-praia"){
+                  array = await getCat("Moda Praia");
+                }else if(catName == "moda-intima"){
+                  array = await getCat("Moda Íntima");
+                }else if(catName == "acessorios"){
+                  array = await getCat("Acessórios");
+                }else{
+                  array = await getCat("Outros");
               }
 
               let htmlChange = "";
 
               let element = document.getElementById("category-id");
               array.forEach(element => {
-                let disponivel = "";
-                if(element.active == true){
-                  disponivel = "Em estoque";
-                }else{
-                  disponivel = "Em falta";
-                }
+                //Formantando moeda para o estilo BRL
+                var productPrice = element.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
 
                 htmlChange += `<div class="col-sm">
-            <div class="container-fluid edit-class">
-              <img class="img-fluid border" src="/api/products/image/${element.imagename}">
-              <div class="product-caption fs-5 fw-bold">${element.name}</div>
-              <div class="product-caption fs-6">${disponivel}</div>
-              <div class="product-caption">R$ ${element.price},00</div>
-            </div>
-          </div>`;
+                  <div class="container-fluid edit-class">
+                    <img class="img-fluid border" src="/api/products/image/${element.imagename}">
+                    <div class="product-caption fs-5 fw-bold">${element.name}</div>
+                    <div class="product-caption fs-6">${element.activeMessage}</div>
+                    <div class="product-caption">${productPrice}</div>
+                  </div>
+                </div>`;
 
               });
               element.innerHTML = htmlChange;

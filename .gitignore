@@ -1,6 +1,7 @@
 HELP.md
 application.properties
 databaseConfig.json
+uploaded-images/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

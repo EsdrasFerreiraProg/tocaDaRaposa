@@ -20,6 +20,9 @@ public class Product extends AbstractEntity{
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Transient
+    private String activeMessage;
+
     @Column(name = "active")
     private boolean active;
 
@@ -28,6 +31,10 @@ public class Product extends AbstractEntity{
 
     public String getName() {
         return name;
+    }
+
+    public String getActiveMessage() {
+        return active ? "Em estoque" : "Em falta";
     }
 
     public void setName(String name) {
@@ -55,6 +62,7 @@ public class Product extends AbstractEntity{
     }
 
     public void setActive(boolean active) {
+        activeMessage = active ? "Em estoque" : "Em falta";
         this.active = active;
     }
 
