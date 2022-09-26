@@ -18,17 +18,17 @@ public class ProductRestController {
     private ProductService productService;
 
     @GetMapping("/all")
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() throws RuntimeException{
         return productService.getAllProducts();
     }
 
     @GetMapping("/bycategory/{category}")
-    public List<Product> getProductsByTitle(@PathVariable("category") String category){
+    public List<Product> getProductsByTitle(@PathVariable("category") String category) throws RuntimeException{
         return productService.getProductsByCategory(category);
     }
 
     @GetMapping("/byid/{id}")
-    public Product getProductById(@PathVariable("id") Long id){
+    public Product getProductById(@PathVariable("id") Long id) throws RuntimeException{
         return productService.findById(id);
     }
 

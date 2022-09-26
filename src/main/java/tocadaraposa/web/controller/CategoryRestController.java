@@ -21,12 +21,12 @@ public class CategoryRestController {
     private CategoryService categoryService;
 
     @GetMapping("/all")
-    public List<Category> getAllCategory(){
+    public List<Category> getAllCategory() throws RuntimeException{
         return categoryService.buscarTodasCategorias();
     }
 
     @GetMapping("/byid/{id}")
-    public Category getCategoryById(@PathVariable("id") Long id){
+    public Category getCategoryById(@PathVariable("id") Long id) throws RuntimeException{
         return categoryService.findById(id);
     }
 

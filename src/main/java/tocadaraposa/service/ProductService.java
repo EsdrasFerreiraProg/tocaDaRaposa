@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = false)
-    public boolean saveProduct(ProductDTO productDTO, RedirectAttributes attr){
+    public boolean saveProduct(ProductDTO productDTO, RedirectAttributes attr) throws RuntimeException{
 
         if(existByName(productDTO.getName())){
             attr.addFlashAttribute("falha", "Esse nome de produto ja existe!");
@@ -70,10 +70,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public boolean uniqueNameDiferentOfOriginal(String name, Long id){
+    public boolean uniqueNameDiferentOfOriginal(String name, Long id) throws RuntimeException{
         Product p = (Product) productRepository.findByExactName(name).orElse( null);
         if(p == null) return true;
-        Product pid = productRepository.findById(id).orElseThrow(() -> {throw new RuntimeException("Id de produto não encontrado");});
+        Product pid = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Id de produto não encontrado"));
         return p.getName().equals(pid.getName());
     }
 
@@ -87,32 +87,30 @@ public class ProductService {
     }
 
     @Transactional(readOnly = false)
-    public void deleteProductById(Long id) {
-        Product p = productRepository.findById(id).orElseThrow(() -> {
-            throw new RuntimeException("Produto não encontrado!");
-        });
+    public void deleteProductById(Long id) throws RuntimeException{
+        Product p = productRepository.findById(id).orElseThrow(() ->
+            new RuntimeException("Produto não encontrado!")
+        );
         FileUploadUtil.deleteFile(p.getImagename(), "product");
         productRepository.delete(p);
     }
 
     @Transactional(readOnly = true)
-    public Product findById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> {
-            throw new RuntimeException("Produto não encontrado!");
-        });
+    public Product findById(Long id) throws RuntimeException{
+        return productRepository.findById(id).orElseThrow(() ->
+            new RuntimeException("Produto não encontrado!")
+        );
     }
 
     @Transactional(readOnly = false)
-    public boolean updateProduct(ProductDTO productDTO, RedirectAttributes attr) {
+    public boolean updateProduct(ProductDTO productDTO, RedirectAttributes attr) throws RuntimeException{
 
         if(!uniqueNameDiferentOfOriginal(productDTO.getName(), productDTO.getId())){
             attr.addFlashAttribute("falha", "Esse nome de produto ja existe!");
             return false;
         }
 
-        Product p = productRepository.findById(productDTO.getId()).orElseThrow(() -> {
-            throw new RuntimeException("Produto não encontrado!");
-        });
+        Product p = productRepository.findById(productDTO.getId()).orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
 
         p.setActive(productDTO.isActive());
         p.setCategory(productDTO.getCategory());

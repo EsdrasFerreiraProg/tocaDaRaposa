@@ -27,7 +27,7 @@ public class AdminCategoryController {
     private CategoryService categoryService;
 
     @GetMapping()
-    public String categoryManager(CategoryDTO categorydto, ModelMap map) {
+    public String categoryManager(CategoryDTO categorydto, ModelMap map) throws RuntimeException{
         List<Category> categories = categoryService.buscarTodasCategorias();
 
         map.addAttribute("categories", categories);
@@ -37,7 +37,7 @@ public class AdminCategoryController {
 
     @PostMapping("/salvar")
     public String saveCategory(@Valid CategoryDTO categorydto, BindingResult result,
-                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException {
+                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException, RuntimeException {
 
         if(result.hasErrors() || categorydto.getImage().isEmpty()){
             categoryService.prepareSaveErrorResponse(categorydto, result, attr);
@@ -53,7 +53,7 @@ public class AdminCategoryController {
 
     @PostMapping("/editar")
     public String editCategory(@Valid CategoryDTO categorydto, BindingResult result,
-                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException {
+                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException, RuntimeException {
 
         if(result.hasErrors() || (categorydto.getImage().isEmpty() && categorydto.getId() == null)){
             categoryService.prepareSaveErrorResponse(categorydto, result, attr);
@@ -68,14 +68,14 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/excluir/{id}")
-    public ResponseEntity<Boolean> excluirProduto(@PathVariable("id") Long id){
+    public ResponseEntity<Boolean> excluirProduto(@PathVariable("id") Long id) throws RuntimeException{
         if(categoryService.hasChilds(id)) return ResponseEntity.ok(Boolean.valueOf(false));
         categoryService.deleteProductById(id);
         return ResponseEntity.ok(Boolean.valueOf(true));
     }
 
     @GetMapping("/editar/{id}")
-    public String preEditarCategory(@PathVariable("id") Long id, RedirectAttributes attr){
+    public String preEditarCategory(@PathVariable("id") Long id, RedirectAttributes attr) throws RuntimeException{
         Category c = categoryService.findById(id);
         CategoryDTO dto = new CategoryDTO(c);
         attr.addFlashAttribute("categorydto", dto);

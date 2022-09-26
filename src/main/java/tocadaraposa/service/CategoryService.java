@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tocadaraposa.domain.Category;
-import tocadaraposa.domain.Product;
 import tocadaraposa.domain.dto.CategoryDTO;
 import tocadaraposa.repository.CategoryRepository;
 import tocadaraposa.service.util.FileUploadUtil;
@@ -29,15 +28,13 @@ public class CategoryService{
     }
 
     @Transactional(readOnly = true)
-    public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> {throw new RuntimeException("Erro ao procurar Categoria");});
+    public Category findById(Long id) throws RuntimeException{
+        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Erro ao procurar Categoria"));
     }
 
     @Transactional(readOnly = false)
-    public void deleteProductById(Long id) {
-        Category c = categoryRepository.findById(id).orElseThrow(() -> {
-            throw new RuntimeException("Produto não encontrado!");
-        });
+    public void deleteProductById(Long id) throws RuntimeException{
+        Category c = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
         FileUploadUtil.deleteFile(c.getImagename(), "category");
         categoryRepository.deleteById(id);
     }
@@ -51,7 +48,7 @@ public class CategoryService{
     }
 
     @Transactional(readOnly = false)
-    public boolean saveCategory(CategoryDTO categorydto, RedirectAttributes attr) {
+    public boolean saveCategory(CategoryDTO categorydto, RedirectAttributes attr) throws RuntimeException{
 
         if(existByName(categorydto.getTitle())){
             attr.addFlashAttribute("falha", "Esse nome de categoria ja existe!");
@@ -84,15 +81,15 @@ public class CategoryService{
     }
 
     @Transactional(readOnly = true)
-    public boolean uniqueNameDiferentOfOriginal(String name, Long id){
+    public boolean uniqueNameDiferentOfOriginal(String name, Long id) throws RuntimeException{
         Category c = (Category) categoryRepository.findByExactName(name).orElse(null);
         if(c == null) return true;
-        Category cid = categoryRepository.findById(id).orElseThrow(() -> {throw new RuntimeException("Id de categoria não encontrado");});
+        Category cid = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Id de categoria não encontrado"));
         return c.getTitle().equals(cid.getTitle());
     }
 
     @Transactional(readOnly = false)
-    public boolean editCategory(CategoryDTO categorydto, RedirectAttributes attr) {
+    public boolean editCategory(CategoryDTO categorydto, RedirectAttributes attr) throws RuntimeException{
 
         if(!uniqueNameDiferentOfOriginal(categorydto.getTitle(), categorydto.getId())){
             attr.addFlashAttribute("falha", "Esse nome de categoria ja existe!");
