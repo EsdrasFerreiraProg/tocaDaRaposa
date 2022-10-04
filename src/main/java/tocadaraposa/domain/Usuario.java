@@ -41,7 +41,7 @@ public class Usuario extends AbstractEntity{
         if (this.perfis == null) {
             this.perfis = new ArrayList<>();
         }
-        this.perfis.add(new Perfil(tipo.getCod()));
+        this.perfis.add(tipo.buildPerfil());
     }
 
     public Usuario(String email) {

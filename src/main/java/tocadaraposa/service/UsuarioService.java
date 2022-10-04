@@ -23,7 +23,7 @@ public class UsuarioService implements UserDetailsService {
 
     @Override @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = buscarPorEmailEAtivo(username)
+        Usuario user = userRepo.findByEmailAndAtivo(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario " + username + " não encontrado/ativo!"));
         return new User(
                 user.getEmail(),
@@ -41,7 +41,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    private Optional<Usuario> buscarPorEmailEAtivo(String username) {
+    public Optional<Usuario> buscarPorEmailEAtivo(String username) {
         return userRepo.findByEmailAndAtivo(username);
     }
 }
