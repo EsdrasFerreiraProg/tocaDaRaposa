@@ -1,5 +1,6 @@
 package tocadaraposa.service.util;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+@Component
 public class FileUploadUtil {
     public void saveFile(String fileName, MultipartFile file, String folder){
         Path uploadDirectory = Paths.get("uploaded-images/" + folder);
