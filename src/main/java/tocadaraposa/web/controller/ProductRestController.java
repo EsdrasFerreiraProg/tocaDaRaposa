@@ -17,6 +17,9 @@ public class ProductRestController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
     @GetMapping("/all")
     public List<Product> getAllProducts() throws RuntimeException{
         return productService.getAllProducts();
@@ -35,7 +38,7 @@ public class ProductRestController {
     @GetMapping("/image/{image}")
     public byte[] getImage(@PathVariable("image") String image) throws IOException {
         if(image != null || image.trim().length() > 0){
-            return Files.readAllBytes(FileUploadUtil.returnFilePath(image, "product"));
+            return Files.readAllBytes(fileUploadUtil.returnFilePath(image, "product"));
         }else{
             return null;
         }

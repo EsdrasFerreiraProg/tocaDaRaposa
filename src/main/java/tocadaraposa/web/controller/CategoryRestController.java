@@ -20,6 +20,9 @@ public class CategoryRestController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
     @GetMapping("/all")
     public List<Category> getAllCategory() throws RuntimeException{
         return categoryService.buscarTodasCategorias();
@@ -33,7 +36,7 @@ public class CategoryRestController {
     @GetMapping("/image/{image}")
     public byte[] getImage(@PathVariable("image") String image) throws IOException {
         if(image != null || image.trim().length() > 0){
-            return Files.readAllBytes(FileUploadUtil.returnFilePath(image, "category"));
+            return Files.readAllBytes(fileUploadUtil.returnFilePath(image, "category"));
         }else{
             return null;
         }

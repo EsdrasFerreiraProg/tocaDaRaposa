@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
-    public static void saveFile(String fileName, MultipartFile file, String folder){
+    public void saveFile(String fileName, MultipartFile file, String folder){
         Path uploadDirectory = Paths.get("uploaded-images/" + folder);
         try(InputStream inputStream = file.getInputStream()){
             Path filePath = uploadDirectory.resolve(fileName);
@@ -20,7 +20,7 @@ public class FileUploadUtil {
             throw new RuntimeException("Erro ao salvar a imagem!");
         }
     }
-    public static void deleteFile(String fileName, String folder){
+    public void deleteFile(String fileName, String folder){
         Path uploadDirectory = Paths.get("uploaded-images/" + folder);
         Path filePath = uploadDirectory.resolve(fileName);
         try{
@@ -30,7 +30,7 @@ public class FileUploadUtil {
         }
     }
 
-    public static Path returnFilePath(String fileName, String folder){
+    public Path returnFilePath(String fileName, String folder){
         Path uploadDirectory = Paths.get("uploaded-images/" + folder);
         Path filePath = uploadDirectory.resolve(fileName);
         return filePath;

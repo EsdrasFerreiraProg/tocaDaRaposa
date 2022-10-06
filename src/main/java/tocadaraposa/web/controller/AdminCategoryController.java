@@ -70,7 +70,7 @@ public class AdminCategoryController {
     @GetMapping("/excluir/{id}")
     public ResponseEntity<Boolean> excluirProduto(@PathVariable("id") Long id) throws RuntimeException{
         if(categoryService.hasChilds(id)) return ResponseEntity.ok(Boolean.valueOf(false));
-        categoryService.deleteProductById(id);
+        categoryService.deleteCategoryById(id);
         return ResponseEntity.ok(Boolean.valueOf(true));
     }
 

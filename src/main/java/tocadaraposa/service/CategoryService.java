@@ -22,6 +22,19 @@ public class CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
+    private String encryptImagesMessageDigestType = "MD5";
+
+    public String getEncryptImagesMessageDigestType() {
+        return encryptImagesMessageDigestType;
+    }
+
+    public void setEncryptImagesMessageDigestType(String encryptImagesMessageDigestType) {
+        this.encryptImagesMessageDigestType = encryptImagesMessageDigestType;
+    }
+
     @Transactional(readOnly = true)
     public List<Category> buscarTodasCategorias(){
         return categoryRepository.findAll();
@@ -33,9 +46,9 @@ public class CategoryService{
     }
 
     @Transactional(readOnly = false)
-    public void deleteProductById(Long id) throws RuntimeException{
+    public void deleteCategoryById(Long id) throws RuntimeException{
         Category c = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
-        FileUploadUtil.deleteFile(c.getImagename(), "category");
+        fileUploadUtil.deleteFile(c.getImagename(), "category");
         categoryRepository.deleteById(id);
     }
 
@@ -50,7 +63,7 @@ public class CategoryService{
     @Transactional(readOnly = false)
     public boolean saveCategory(CategoryDTO categorydto, RedirectAttributes attr) throws RuntimeException{
 
-        if(existByName(categorydto.getTitle())){
+        if(categoryRepository.findByExactName(categorydto.getTitle()).isPresent()){
             attr.addFlashAttribute("falha", "Esse nome de categoria ja existe!");
             return false;
         }
@@ -63,13 +76,14 @@ public class CategoryService{
 
         String imagename = "category-" + String.valueOf(c.getId());
         try {
-            MessageDigest m = MessageDigest.getInstance("MD5");
+            MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
             m.update(imagename.getBytes(),0,imagename.length());
             imagename = new BigInteger(1,m.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Erro ao salvar a imagem no servidor!");
         }
-        FileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
+
+        fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
         c.setImagename(imagename + ".png");
         categoryRepository.save(c);
         return true;
@@ -109,7 +123,7 @@ public class CategoryService{
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException("Erro ao salvar a imagem no servidor!");
             }
-            FileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
+            fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
             c.setImagename(imagename + ".png");
         }
         categoryRepository.save(c);

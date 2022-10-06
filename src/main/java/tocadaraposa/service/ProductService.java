@@ -21,6 +21,9 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -56,7 +59,7 @@ public class ProductService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Erro ao salvar a imagem no servidor!");
         }
-        FileUploadUtil.saveFile(imagename + ".png", productDTO.getImage(), "product");
+        fileUploadUtil.saveFile(imagename + ".png", productDTO.getImage(), "product");
         p.setImagename(imagename + ".png");
         productRepository.save(p);
 
@@ -91,7 +94,7 @@ public class ProductService {
         Product p = productRepository.findById(id).orElseThrow(() ->
             new RuntimeException("Produto não encontrado!")
         );
-        FileUploadUtil.deleteFile(p.getImagename(), "product");
+        fileUploadUtil.deleteFile(p.getImagename(), "product");
         productRepository.delete(p);
     }
 
@@ -126,7 +129,7 @@ public class ProductService {
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException("Erro ao salvar a imagem no servidor!");
             }
-            FileUploadUtil.saveFile(imagename + ".png", productDTO.getImage(), "product");
+            fileUploadUtil.saveFile(imagename + ".png", productDTO.getImage(), "product");
             p.setImagename(imagename + ".png");
         }
         productRepository.save(p);
