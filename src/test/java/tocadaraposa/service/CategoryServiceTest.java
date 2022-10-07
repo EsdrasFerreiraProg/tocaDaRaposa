@@ -5,9 +5,11 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-import tocadaraposa.ApplicationConfigTest;
+import tocadaraposa.config.ApplicationConfigTest;
 import tocadaraposa.domain.Category;
 import tocadaraposa.domain.dto.CategoryDTO;
 import tocadaraposa.repository.CategoryRepository;
@@ -29,6 +31,10 @@ public class CategoryServiceTest extends ApplicationConfigTest {
 
     @Autowired
     private CategoryService categoryService;
+
+    private void resetEncryptImagePathArgument(){
+        categoryService.setEncryptImagesMessageDigestType("MD5");
+    }
 
     @Test
     public void shouldFindAllCategories(){
@@ -81,7 +87,7 @@ public class CategoryServiceTest extends ApplicationConfigTest {
 
 
     @Test
-    public void shouldReturnFalseWhenCategoryNameAlreadyExists(){
+    public void shouldNotSaveWhenCategoryNameAlreadyExists(){
         final String testName = "teste category";
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setTitle(testName);
@@ -144,7 +150,9 @@ public class CategoryServiceTest extends ApplicationConfigTest {
                             ArgumentMatchers.any(MultipartFile.class),
                             ArgumentMatchers.anyString());
 
+        resetEncryptImagePathArgument();
         assertTrue(categoryService.saveCategory(categoryDTO, attr));
+
         Mockito.verify(categoryRepository, Mockito.times(1)).findByExactName(ArgumentMatchers.anyString());
         Mockito.verify(categoryRepository, Mockito.times(2)).save(ArgumentMatchers.any(Category.class));
         Mockito.verify(fileUploadUtil, Mockito.times(1))
@@ -167,6 +175,185 @@ public class CategoryServiceTest extends ApplicationConfigTest {
         Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(testName))).thenReturn(Optional.of(new Category()));
         assertTrue(categoryService.existByName(testName));
         Mockito.verify(categoryRepository, Mockito.times(1)).findByExactName(ArgumentMatchers.eq(testName));
+    }
+
+    @Test
+    public void shouldTestIfIsAUniqueName(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Category c1 = new Category();
+        c1.setTitle(mockedTitle);
+        Category c2= new Category();
+        c2.setId(mockedID);
+        c2.setTitle("other title");
+
+        //Quando um objeto diferente tem ja possui esse titulo
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.of(c1));
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
+                .thenReturn(Optional.of(c2));
+        assertFalse(categoryService.uniqueNameDiferentOfOriginal(mockedTitle, mockedID));
+
+        //Quando não existe nenhum objeto com esse nome
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.empty());
+        assertTrue(categoryService.uniqueNameDiferentOfOriginal(mockedTitle, mockedID));
+
+        //Quando existe algum objeto com o titulo mas é o mesmo que está sendo testado
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.of(c1));
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
+                .thenReturn(Optional.of(c1));
+        assertTrue(categoryService.uniqueNameDiferentOfOriginal(mockedTitle, mockedID));
+
+        Mockito.verify(categoryRepository, Mockito.times(2)).findById(ArgumentMatchers.eq(mockedID));
+        Mockito.verify(categoryRepository, Mockito.times(3)).findByExactName(ArgumentMatchers.eq(mockedTitle));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowRuntimeExceptionOnInvalidIdInUniqueNameDifferentOfOriginal(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Category c1 = new Category();
+        c1.setTitle(mockedTitle);
+
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle))).thenReturn(Optional.of(c1));
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID))).thenReturn(Optional.empty());
+
+        categoryService.uniqueNameDiferentOfOriginal(mockedTitle, mockedID);
+    }
+
+    @Test
+    public void shouldTestIfHasChilds(){
+        final long mockedID = 1L;
+        final PageRequest pageRequestTest = PageRequest.of(0,1);
+        final List<Category> mockedList = List.of(new Category());
+
+        Mockito.when(categoryRepository
+                        .findFirstHasProducts(ArgumentMatchers.eq(mockedID),
+                                            ArgumentMatchers.eq(pageRequestTest)))
+                        .thenReturn(mockedList);
+
+        assertTrue(categoryService.hasChilds(mockedID));
+
+        Mockito.when(categoryRepository
+                        .findFirstHasProducts(ArgumentMatchers.any(Long.class),
+                                            ArgumentMatchers.any(PageRequest.class)))
+                        .thenReturn(new ArrayList<>());
+
+        assertFalse(categoryService.hasChilds(2L));
+
+        Mockito.verify(categoryRepository, Mockito.times(2))
+                .findFirstHasProducts(ArgumentMatchers.any(Long.class),
+                                    ArgumentMatchers.any(PageRequest.class));
+    }
+
+    @Test
+    public void shouldNotEditWhenCategoryNameAlreadyExists(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Category c1 = new Category();
+        c1.setTitle(mockedTitle);
+        Category c2= new Category();
+        c2.setId(mockedID);
+        c2.setTitle("other title");
+
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.of(c1));
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
+                .thenReturn(Optional.of(c2));
+        CategoryDTO dto = new CategoryDTO();
+        dto.setTitle(mockedTitle);
+        dto.setId(mockedID);
+        RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
+        Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
+        assertFalse(categoryService.editCategory(dto, attr));
+
+        Mockito.verify(categoryRepository, Mockito.times(1)).findById(ArgumentMatchers.eq(mockedID));
+        Mockito.verify(categoryRepository, Mockito.times(1)).findByExactName(ArgumentMatchers.eq(mockedTitle));
+
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldNotEditWhenCantFindCategory(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.empty());
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setTitle(mockedTitle);
+        dto.setId(mockedID);
+        RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
+        Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
+        assertFalse(categoryService.editCategory(dto, attr));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldNotEditWhenCantSaveCategoryImage(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.empty());
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setTitle(mockedTitle);
+        dto.setId(mockedID);
+        MultipartFile mf = Mockito.mock(MultipartFile.class);
+        dto.setImage(mf);
+        Mockito.when(mf.isEmpty()).thenReturn(false);
+        RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
+        Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
+                .thenReturn(Optional.of(new Category(mockedID)));
+
+        categoryService.setEncryptImagesMessageDigestType("error");
+        categoryService.editCategory(dto, attr);
+    }
+
+    @Test
+    public void shouldEditCategoryWhenTitleIsNotChanged(){
+        final String mockedTitle = "title";
+        final long mockedID = 1L;
+
+        Category c1 = new Category();
+        c1.setTitle(mockedTitle);
+        c1.setId(mockedID);
+        Mockito.when(categoryRepository.findByExactName(ArgumentMatchers.eq(mockedTitle)))
+                .thenReturn(Optional.of(c1));
+        Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
+                .thenReturn(Optional.of(c1));
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setTitle(mockedTitle);
+        dto.setId(mockedID);
+        MultipartFile mf = Mockito.mock(MultipartFile.class);
+        dto.setImage(mf);
+        Mockito.when(mf.isEmpty()).thenReturn(false);
+        RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
+        Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
+
+        Mockito.when(categoryRepository.save(ArgumentMatchers.any(Category.class))).thenReturn(c1);
+        Mockito.doNothing().when(fileUploadUtil)
+                .saveFile(  ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(MultipartFile.class),
+                        ArgumentMatchers.anyString());
+
+        resetEncryptImagePathArgument();
+        assertTrue(categoryService.editCategory(dto, attr));
+
+        Mockito.verify(categoryRepository, Mockito.times(1)).save(ArgumentMatchers.any(Category.class));
+        Mockito.verify(fileUploadUtil, Mockito.times(1))
+                .saveFile(  ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(MultipartFile.class),
+                        ArgumentMatchers.anyString());
+        Mockito.verify(categoryRepository, Mockito.times(2)).findById(ArgumentMatchers.eq(mockedID));
+        Mockito.verify(categoryRepository, Mockito.times(1)).findByExactName(ArgumentMatchers.eq(mockedTitle));
     }
 
 }

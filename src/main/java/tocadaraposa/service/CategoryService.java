@@ -69,12 +69,24 @@ public class CategoryService{
         }
 
         Category c = new Category();
-
         c.setTitle(categorydto.getTitle());
         c.setImagename("dump");
+
+        //Save to generate ID
         c = categoryRepository.save(c);
 
         String imagename = "category-" + String.valueOf(c.getId());
+        imagename = saveImage(c, imagename);
+
+        fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
+        c.setImagename(imagename + ".png");
+
+        //Save again to update image path
+        categoryRepository.save(c);
+        return true;
+    }
+
+    private String saveImage(Category c, String imagename){
         try {
             MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
             m.update(imagename.getBytes(),0,imagename.length());
@@ -82,11 +94,7 @@ public class CategoryService{
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Erro ao salvar a imagem no servidor!");
         }
-
-        fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
-        c.setImagename(imagename + ".png");
-        categoryRepository.save(c);
-        return true;
+        return imagename;
     }
 
     @Transactional(readOnly = true)
@@ -110,28 +118,25 @@ public class CategoryService{
             return false;
         }
 
-        Category c = new Category();
-
+        Category c = categoryRepository.findById(categorydto.getId()).orElseThrow(
+                () -> new RuntimeException("Categoria não encontrada")
+        );
         c.setTitle(categorydto.getTitle());
 
         if(categorydto.getImage() != null && !categorydto.getImage().isEmpty()) {
             String imagename = "category-" + String.valueOf(c.getId());
-            try {
-                MessageDigest m = MessageDigest.getInstance("MD5");
-                m.update(imagename.getBytes(), 0, imagename.length());
-                imagename = new BigInteger(1, m.digest()).toString(16);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException("Erro ao salvar a imagem no servidor!");
-            }
+            imagename = saveImage(c, imagename);
+
             fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
             c.setImagename(imagename + ".png");
         }
+
         categoryRepository.save(c);
         return true;
     }
 
     @Transactional(readOnly = true)
     public boolean hasChilds(Long id) {
-        return !categoryRepository.findFirst(id, PageRequest.of(0,1)).isEmpty();
+        return !categoryRepository.findFirstHasProducts(id, PageRequest.of(0,1)).isEmpty();
     }
 }

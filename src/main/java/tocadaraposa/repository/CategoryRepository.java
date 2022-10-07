@@ -16,6 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c " +
             "INNER JOIN Product p " +
-            "ON c.id = p.id WHERE c.id = :id")
-    List<Category> findFirst(Long id, Pageable page);
+            "ON c.id = p.id WHERE c.id = :categoryID")
+    List<Category> findFirstHasProducts(@Param("categoryID") Long categoryID, Pageable page);
 }

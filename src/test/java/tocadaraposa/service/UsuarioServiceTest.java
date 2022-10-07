@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import tocadaraposa.ApplicationConfigTest;
+import tocadaraposa.config.ApplicationConfigTest;
 import tocadaraposa.domain.Perfil;
 import tocadaraposa.domain.PerfilTipo;
 import tocadaraposa.domain.Usuario;

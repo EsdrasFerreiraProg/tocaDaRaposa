@@ -1,4 +1,4 @@
-package tocadaraposa;
+package tocadaraposa.config;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
