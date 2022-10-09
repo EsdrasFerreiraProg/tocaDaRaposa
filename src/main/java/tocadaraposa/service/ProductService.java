@@ -24,6 +24,16 @@ public class ProductService {
     @Autowired
     private FileUploadUtil fileUploadUtil;
 
+    private String encryptImagesMessageDigestType = "MD5";
+
+    public String getEncryptImagesMessageDigestType() {
+        return encryptImagesMessageDigestType;
+    }
+
+    public void setEncryptImagesMessageDigestType(String encryptImagesMessageDigestType) {
+        this.encryptImagesMessageDigestType = encryptImagesMessageDigestType;
+    }
+
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -53,7 +63,7 @@ public class ProductService {
         p = productRepository.save(p);
         String imagename = "product-" + String.valueOf(p.getId());
         try {
-            MessageDigest m = MessageDigest.getInstance("MD5");
+            MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
             m.update(imagename.getBytes(),0,imagename.length());
             imagename = new BigInteger(1,m.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
@@ -123,7 +133,7 @@ public class ProductService {
         if(productDTO.getImage() != null && !productDTO.getImage().isEmpty()){
             String imagename = "product-" + String.valueOf(p.getId());
             try {
-                MessageDigest m = MessageDigest.getInstance("MD5");
+                MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
                 m.update(imagename.getBytes(),0,imagename.length());
                 imagename = new BigInteger(1,m.digest()).toString(16);
             } catch (NoSuchAlgorithmException e) {

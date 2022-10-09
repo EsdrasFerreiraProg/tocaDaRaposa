@@ -29,6 +29,12 @@ public class Product extends AbstractEntity{
     @Column(name = "imagepath", nullable = false)
     private String imagename;
 
+    public Product(long id){
+        super.setId(id);
+    }
+
+    public Product(){}
+
     public String getName() {
         return name;
     }

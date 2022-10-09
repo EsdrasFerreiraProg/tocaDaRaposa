@@ -288,6 +288,7 @@ public class CategoryServiceTest extends ApplicationConfigTest {
         CategoryDTO dto = new CategoryDTO();
         dto.setTitle(mockedTitle);
         dto.setId(mockedID);
+
         RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
         Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
         assertFalse(categoryService.editCategory(dto, attr));
@@ -304,9 +305,11 @@ public class CategoryServiceTest extends ApplicationConfigTest {
         CategoryDTO dto = new CategoryDTO();
         dto.setTitle(mockedTitle);
         dto.setId(mockedID);
+
         MultipartFile mf = Mockito.mock(MultipartFile.class);
         dto.setImage(mf);
         Mockito.when(mf.isEmpty()).thenReturn(false);
+
         RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
         Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
         Mockito.when(categoryRepository.findById(ArgumentMatchers.eq(mockedID)))
@@ -332,9 +335,11 @@ public class CategoryServiceTest extends ApplicationConfigTest {
         CategoryDTO dto = new CategoryDTO();
         dto.setTitle(mockedTitle);
         dto.setId(mockedID);
+
         MultipartFile mf = Mockito.mock(MultipartFile.class);
         dto.setImage(mf);
         Mockito.when(mf.isEmpty()).thenReturn(false);
+
         RedirectAttributes attr = Mockito.mock(RedirectAttributes.class);
         Mockito.when(attr.addFlashAttribute(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(attr);
 
