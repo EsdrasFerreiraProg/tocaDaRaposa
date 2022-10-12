@@ -12,3 +12,4 @@ public class TocadaraposaApplication {
 		SpringApplication.run(TocadaraposaApplication.class, args);
 	}
 }
+

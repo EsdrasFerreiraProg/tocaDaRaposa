@@ -3,11 +3,16 @@
     line-height: 1.2;
     margin-bottom: -1%;
 }
+
 .image-css{
     opacity: 0.1;
 }
-.fox-icon{
-    
+
+.container{
+    margin-bottom: -2%;
+}
+.qr-code{
+    margin-top: -4%;
 }
 .caption{
     color:white;
@@ -63,3 +68,4 @@ hr{
 .product-image-change{
     height: 100%;
 }
+
