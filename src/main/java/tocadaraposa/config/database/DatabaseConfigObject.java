@@ -24,6 +24,7 @@ public class DatabaseConfigObject {
         return databaseName;
     }
 
+    @SuppressWarnings("unused")
     public void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
     }

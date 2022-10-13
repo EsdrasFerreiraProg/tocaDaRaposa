@@ -6,18 +6,20 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import tocadaraposa.config.ApplicationConfigTest;
+import tocadaraposa.config.ApplicationConfig;
 import tocadaraposa.domain.Perfil;
 import tocadaraposa.domain.PerfilTipo;
 import tocadaraposa.domain.Usuario;
 import tocadaraposa.repository.UsuarioRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UsuarioServiceTest extends ApplicationConfigTest {
+@SuppressWarnings("unused")
+public class UsuarioServiceTest extends ApplicationConfig {
 
     @MockBean
     private UsuarioRepository userRepo;
@@ -37,7 +39,8 @@ public class UsuarioServiceTest extends ApplicationConfigTest {
 
         Usuario mockedUser = Mockito.mock(Usuario.class);
         Optional<Usuario> optMockedUser = Optional.of(mockedUser);
-        List<Perfil> list = List.of(PerfilTipo.ADMIN.buildPerfil());
+        List<Perfil> list = new ArrayList<>();
+        list.add(PerfilTipo.ADMIN.buildPerfil());
 
         Mockito.when(mockedUser.getEmail()).thenReturn(mockedUsername);
         Mockito.when(mockedUser.getSenha()).thenReturn("senha");
@@ -53,7 +56,8 @@ public class UsuarioServiceTest extends ApplicationConfigTest {
 
         Usuario mockedUser = Mockito.mock(Usuario.class);
         Optional<Usuario> optMockedUser = Optional.of(mockedUser);
-        List<Perfil> list = List.of(PerfilTipo.ADMIN.buildPerfil());
+        List<Perfil> list = new ArrayList<>();
+        list.add(PerfilTipo.ADMIN.buildPerfil());
 
         Mockito.when(mockedUser.getEmail()).thenReturn(mockedUsername);
         Mockito.when(mockedUser.getSenha()).thenReturn("senha");

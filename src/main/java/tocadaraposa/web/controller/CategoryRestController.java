@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
+@SuppressWarnings("unused")
 public class CategoryRestController {
 
     @Autowired
@@ -34,8 +35,8 @@ public class CategoryRestController {
     }
 
     @GetMapping("/image/{image}")
-    public byte[] getImage(@PathVariable("image") String image) throws IOException {
-        if(image != null || image.trim().length() > 0){
+    public byte[] getImage(@PathVariable("image") String image) throws IOException, NoSuchFieldException {
+        if(image != null && image.trim().length() > 0){
             return Files.readAllBytes(fileUploadUtil.returnFilePath(image, "category"));
         }else{
             return null;

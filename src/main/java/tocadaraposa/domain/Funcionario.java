@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@SuppressWarnings("unused")
 public class Funcionario extends AbstractEntity{
 
     @Column(name = "nome", nullable = false)

@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
+@SuppressWarnings("unused")
 public class ProductService {
 
     @Autowired
@@ -44,7 +45,7 @@ public class ProductService {
         return productRepository.findByCategoryTitle(title);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public boolean saveProduct(ProductDTO productDTO, RedirectAttributes attr) throws RuntimeException{
 
         if(existByName(productDTO.getName())){
@@ -61,7 +62,7 @@ public class ProductService {
         p.setPrice(productDTO.getPrice());
 
         p = productRepository.save(p);
-        String imagename = "product-" + String.valueOf(p.getId());
+        String imagename = "product-" + p.getId();
         try {
             MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
             m.update(imagename.getBytes(),0,imagename.length());
@@ -84,7 +85,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public boolean uniqueNameDiferentOfOriginal(String name, Long id) throws RuntimeException{
-        Product p = (Product) productRepository.findByExactName(name).orElse( null);
+        Product p = productRepository.findByExactName(name).orElse( null);
         if(p == null) return true;
         Product pid = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Id de produto não encontrado"));
         return p.getName().equals(pid.getName());
@@ -99,7 +100,7 @@ public class ProductService {
         attr.addFlashAttribute("falha", "Erro ao inserir produto!");
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void deleteProductById(Long id) throws RuntimeException{
         Product p = productRepository.findById(id).orElseThrow(() ->
             new RuntimeException("Produto não encontrado!")
@@ -115,7 +116,7 @@ public class ProductService {
         );
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public boolean updateProduct(ProductDTO productDTO, RedirectAttributes attr) throws RuntimeException{
 
         if(!uniqueNameDiferentOfOriginal(productDTO.getName(), productDTO.getId())){
@@ -131,7 +132,7 @@ public class ProductService {
         p.setPrice(productDTO.getPrice());
 
         if(productDTO.getImage() != null && !productDTO.getImage().isEmpty()){
-            String imagename = "product-" + String.valueOf(p.getId());
+            String imagename = "product-" + p.getId();
             try {
                 MessageDigest m = MessageDigest.getInstance(encryptImagesMessageDigestType);
                 m.update(imagename.getBytes(),0,imagename.length());

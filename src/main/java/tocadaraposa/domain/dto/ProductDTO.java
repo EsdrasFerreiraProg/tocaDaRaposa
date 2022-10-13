@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@SuppressWarnings("unused")
 public class ProductDTO {
 
     private Long id;

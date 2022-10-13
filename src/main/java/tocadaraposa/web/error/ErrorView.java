@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Component
+@SuppressWarnings("unused")
 public class ErrorView implements ErrorViewResolver {
     @Override
     public ModelAndView resolveErrorView(HttpServletRequest request, HttpStatus status, Map<String, Object> map) {

@@ -33,9 +33,9 @@
                         <div class="col mb-3">
                             <label for="image">Imagem</label>
                             <input class="form-control" th:classappend="${image != null} ? is-invalid" th:field="*{image}" id="image"
-                                name="image" type="file" required>
+                                name="image" type="file">
                             <div th:if="${image != null}" class="text-danger">
-                                <small th:text="${image}">O categoria precisa de uma imagem.</small>
+                                <small th:text="${image}">A categoria precisa de uma imagem.</small>
                             </div>
                         </div>
                     </div>

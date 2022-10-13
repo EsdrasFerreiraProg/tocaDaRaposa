@@ -1,6 +1,5 @@
 package tocadaraposa.web.controller;
 
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,11 +15,11 @@ import tocadaraposa.domain.dto.CategoryDTO;
 import tocadaraposa.service.CategoryService;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin/category")
+@SuppressWarnings("unused")
 public class AdminCategoryController {
 
     @Autowired
@@ -37,7 +36,7 @@ public class AdminCategoryController {
 
     @PostMapping("/salvar")
     public String saveCategory(@Valid CategoryDTO categorydto, BindingResult result,
-                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException, RuntimeException {
+                               RedirectAttributes attr) throws RuntimeException {
 
         if(result.hasErrors() || categorydto.getImage().isEmpty()){
             categoryService.prepareSaveErrorResponse(categorydto, result, attr);
@@ -53,7 +52,7 @@ public class AdminCategoryController {
 
     @PostMapping("/editar")
     public String editCategory(@Valid CategoryDTO categorydto, BindingResult result,
-                               RedirectAttributes attr) throws IOException, FileSizeLimitExceededException, RuntimeException {
+                               RedirectAttributes attr) throws RuntimeException {
 
         if(result.hasErrors() || (categorydto.getImage().isEmpty() && categorydto.getId() == null)){
             categoryService.prepareSaveErrorResponse(categorydto, result, attr);
@@ -69,9 +68,9 @@ public class AdminCategoryController {
 
     @GetMapping("/excluir/{id}")
     public ResponseEntity<Boolean> excluirProduto(@PathVariable("id") Long id) throws RuntimeException{
-        if(categoryService.hasChilds(id)) return ResponseEntity.ok(Boolean.valueOf(false));
+        if(categoryService.hasChilds(id)) return ResponseEntity.ok(false);
         categoryService.deleteCategoryById(id);
-        return ResponseEntity.ok(Boolean.valueOf(true));
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/editar/{id}")

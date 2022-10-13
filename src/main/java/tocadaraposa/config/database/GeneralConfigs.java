@@ -55,7 +55,7 @@ public class GeneralConfigs {
         Path destino = Paths.get("application.properties");
 
         Charset charset = StandardCharsets.UTF_8;
-        String content = new String(Files.readAllBytes(origem), charset);
+        String content = Files.readString(origem);
 
         content = content.replaceAll("<<URL>>", c.getUrl());
         content = content.replaceAll("<<USER>>", c.getUser());
@@ -68,12 +68,16 @@ public class GeneralConfigs {
         File directory = new File("uploaded-images/product");
         if (!directory.exists()) {
             System.out.println("DB LOG -> Creating uploaded-images/product directory!");
-            directory.mkdirs();
+            if(!directory.mkdirs()){
+                System.out.println("!!!!!!!! NÃO FOI POSSIVEL CRIAR A PASTA DOS PRODUTOS !!!!!!!!!!");
+            }
         }
         directory = new File("uploaded-images/category");
         if (!directory.exists()) {
             System.out.println("DB LOG -> Creating uploaded-images/category directory!");
-            directory.mkdirs();
+            if(!directory.mkdirs()){
+                System.out.println("!!!!!!!! NÃO FOI POSSIVEL CRIAR A PASTA DAS CATEGORIAS !!!!!!!!!!");
+            }
         }
     }
 }

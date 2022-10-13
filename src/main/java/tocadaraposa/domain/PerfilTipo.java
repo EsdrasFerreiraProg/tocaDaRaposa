@@ -1,12 +1,13 @@
 package tocadaraposa.domain;
 
+@SuppressWarnings("unused")
 public enum PerfilTipo {
     ADMIN(1, "ADMIN");
 
-    private long cod;
-    private String desc;
+    private final long cod;
+    private final String desc;
 
-    private PerfilTipo(long cod, String desc){
+    PerfilTipo(long cod, String desc){
         this.cod = cod;
         this.desc = desc;
     }

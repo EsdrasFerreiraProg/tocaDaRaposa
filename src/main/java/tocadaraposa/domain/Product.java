@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
+@SuppressWarnings("unused")
 public class Product extends AbstractEntity{
 
     @Column(name = "name", nullable = false)
@@ -19,9 +20,6 @@ public class Product extends AbstractEntity{
     @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-
-    @Transient
-    private String activeMessage;
 
     @Column(name = "active")
     private boolean active;
@@ -68,7 +66,6 @@ public class Product extends AbstractEntity{
     }
 
     public void setActive(boolean active) {
-        activeMessage = active ? "Em estoque" : "Em falta";
         this.active = active;
     }
 

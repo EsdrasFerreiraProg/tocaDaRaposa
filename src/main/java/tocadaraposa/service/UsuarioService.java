@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings("unused")
 public class UsuarioService implements UserDetailsService {
 
     @Autowired
@@ -41,6 +42,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
+    @SuppressWarnings("UnusedReturnValue")
     public Optional<Usuario> buscarPorEmailEAtivo(String username) {
         return userRepo.findByEmailAndAtivo(username);
     }

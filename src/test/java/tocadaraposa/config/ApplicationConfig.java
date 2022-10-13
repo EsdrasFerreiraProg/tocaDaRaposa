@@ -8,5 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-public class ApplicationConfigTest {
+@SuppressWarnings("all")
+public class ApplicationConfig {
 }

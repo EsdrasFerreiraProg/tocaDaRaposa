@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@SuppressWarnings("unused")
 public class ProductRestController {
 
     @Autowired
@@ -36,8 +37,8 @@ public class ProductRestController {
     }
 
     @GetMapping("/image/{image}")
-    public byte[] getImage(@PathVariable("image") String image) throws IOException {
-        if(image != null || image.trim().length() > 0){
+    public byte[] getImage(@PathVariable("image") String image) throws IOException, NoSuchFieldException {
+        if(image != null && image.trim().length() > 0){
             return Files.readAllBytes(fileUploadUtil.returnFilePath(image, "product"));
         }else{
             return null;

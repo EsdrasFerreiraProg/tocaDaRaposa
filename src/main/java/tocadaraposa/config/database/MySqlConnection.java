@@ -8,7 +8,7 @@ public class MySqlConnection implements DatabaseConnect{
 
     protected Connection con;
     private final String url;
-    private String user, password, databaseName;
+    private final String user, password, databaseName;
 
     public MySqlConnection(String user, String password, String databaseName){
         con = null;

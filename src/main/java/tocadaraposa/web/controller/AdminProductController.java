@@ -1,6 +1,5 @@
 package tocadaraposa.web.controller;
 
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,11 +17,11 @@ import tocadaraposa.service.CategoryService;
 import tocadaraposa.service.ProductService;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin/product")
+@SuppressWarnings("unused")
 public class AdminProductController {
 
     @Autowired
@@ -44,7 +43,7 @@ public class AdminProductController {
 
     @PostMapping("/salvar")
     public String saveProduct(@Valid ProductDTO productdto, BindingResult result,
-                              RedirectAttributes attr) throws IOException, FileSizeLimitExceededException {
+                              RedirectAttributes attr) {
         if(result.hasErrors() || productdto.getImage().isEmpty()){
             productService.prepareSaveErrorResponse(productdto, result, attr);
         }else{
@@ -59,7 +58,7 @@ public class AdminProductController {
 
     @PostMapping("/editar")
     public String editProduct(@Valid ProductDTO productdto, BindingResult result,
-                              RedirectAttributes attr) throws IOException, FileSizeLimitExceededException {
+                              RedirectAttributes attr) {
         if(result.hasErrors() || (productdto.getImage().isEmpty() && productdto.getId() == null)){
             productService.prepareSaveErrorResponse(productdto, result, attr);
         }else{
@@ -75,7 +74,7 @@ public class AdminProductController {
     @GetMapping("/excluir/{id}")
     public ResponseEntity<Boolean> excluirProduto(@PathVariable("id") Long id){
         productService.deleteProductById(id);
-        return ResponseEntity.ok(Boolean.valueOf(true));
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/editar/{id}")

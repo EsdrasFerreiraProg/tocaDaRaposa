@@ -8,10 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-import tocadaraposa.config.ApplicationConfigTest;
+import tocadaraposa.config.ApplicationConfig;
 import tocadaraposa.domain.Category;
 import tocadaraposa.domain.Product;
-import tocadaraposa.domain.dto.CategoryDTO;
 import tocadaraposa.domain.dto.ProductDTO;
 import tocadaraposa.repository.ProductRepository;
 import tocadaraposa.service.util.FileUploadUtil;
@@ -23,7 +22,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ProductServiceTest extends ApplicationConfigTest {
+@SuppressWarnings("unused")
+public class ProductServiceTest extends ApplicationConfig {
 
     @MockBean
     private ProductRepository productRepository;

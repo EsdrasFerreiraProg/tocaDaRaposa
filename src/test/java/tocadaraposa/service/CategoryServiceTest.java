@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-import tocadaraposa.config.ApplicationConfigTest;
+import tocadaraposa.config.ApplicationConfig;
 import tocadaraposa.domain.Category;
 import tocadaraposa.domain.dto.CategoryDTO;
 import tocadaraposa.repository.CategoryRepository;
@@ -21,7 +21,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CategoryServiceTest extends ApplicationConfigTest {
+@SuppressWarnings("unused")
+public class CategoryServiceTest extends ApplicationConfig {
 
     @MockBean
     private CategoryRepository categoryRepository;
@@ -229,7 +230,8 @@ public class CategoryServiceTest extends ApplicationConfigTest {
     public void shouldTestIfHasChilds(){
         final long mockedID = 1L;
         final PageRequest pageRequestTest = PageRequest.of(0,1);
-        final List<Category> mockedList = List.of(new Category());
+        final List<Category> mockedList = new ArrayList<>();
+        mockedList.add(new Category());
 
         Mockito.when(categoryRepository
                         .findFirstHasProducts(ArgumentMatchers.eq(mockedID),

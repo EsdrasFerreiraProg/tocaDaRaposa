@@ -2,8 +2,6 @@ package tocadaraposa.service.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -34,8 +32,7 @@ public class FileUploadUtil {
 
     public Path returnFilePath(String fileName, String folder){
         Path uploadDirectory = Paths.get("uploaded-images/" + folder);
-        Path filePath = uploadDirectory.resolve(fileName);
-        return filePath;
+        return uploadDirectory.resolve(fileName);
     }
 
 }

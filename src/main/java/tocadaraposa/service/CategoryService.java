@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
+@SuppressWarnings("unused")
 public class CategoryService{
 
     @Autowired
@@ -45,7 +46,7 @@ public class CategoryService{
         return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Erro ao procurar Categoria"));
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void deleteCategoryById(Long id) throws RuntimeException{
         Category c = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
         fileUploadUtil.deleteFile(c.getImagename(), "category");
@@ -60,7 +61,7 @@ public class CategoryService{
         attr.addFlashAttribute("falha", "Erro ao inserir categoria!");
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public boolean saveCategory(CategoryDTO categorydto, RedirectAttributes attr) throws RuntimeException{
 
         if(categoryRepository.findByExactName(categorydto.getTitle()).isPresent()){
@@ -75,7 +76,7 @@ public class CategoryService{
         //Save to generate ID
         c = categoryRepository.save(c);
 
-        String imagename = "category-" + String.valueOf(c.getId());
+        String imagename = "category-" + c.getId();
         imagename = saveImage(c, imagename);
 
         fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");
@@ -104,13 +105,13 @@ public class CategoryService{
 
     @Transactional(readOnly = true)
     public boolean uniqueNameDiferentOfOriginal(String name, Long id) throws RuntimeException{
-        Category c = (Category) categoryRepository.findByExactName(name).orElse(null);
+        Category c = categoryRepository.findByExactName(name).orElse(null);
         if(c == null) return true;
         Category cid = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Id de categoria não encontrado"));
         return c.getTitle().equals(cid.getTitle());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public boolean editCategory(CategoryDTO categorydto, RedirectAttributes attr) throws RuntimeException{
 
         if(!uniqueNameDiferentOfOriginal(categorydto.getTitle(), categorydto.getId())){
@@ -124,7 +125,7 @@ public class CategoryService{
         c.setTitle(categorydto.getTitle());
 
         if(categorydto.getImage() != null && !categorydto.getImage().isEmpty()) {
-            String imagename = "category-" + String.valueOf(c.getId());
+            String imagename = "category-" + c.getId();
             imagename = saveImage(c, imagename);
 
             fileUploadUtil.saveFile(imagename + ".png", categorydto.getImage(), "category");

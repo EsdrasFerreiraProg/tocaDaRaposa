@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@SuppressWarnings("unused")
 public class Category extends AbstractEntity{
 
     @Column(name = "title", nullable = false)

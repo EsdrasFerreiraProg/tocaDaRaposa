@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "profile")
+@SuppressWarnings("unused")
 public class Perfil extends AbstractEntity{
 
     @Column(name = "desc", nullable = false, unique = true)

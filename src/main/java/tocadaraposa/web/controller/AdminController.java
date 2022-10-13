@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
+@SuppressWarnings("unused")
 public class AdminController {
 
     @GetMapping("/login")
